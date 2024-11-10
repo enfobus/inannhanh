@@ -1,13 +1,7 @@
 // pages/index.tsx
 import { GetStaticProps } from 'next';
-import { getServices } from '../lib/contentful';
-
-type Service = {
-  title: string;
-  description: string;
-  urgency: string;
-  image?: { fields: { file: { url: string } } };
-};
+import { getServices, Service } from '../lib/contentful';
+import Image from 'next/image';
 
 type HomeProps = {
   services: Service[];
@@ -20,14 +14,19 @@ const Home = ({ services }: HomeProps) => {
       <div className="services">
         {services.map((service, index) => (
           <div key={index} className="service">
-            {service.image?.fields?.file?.url ? (
-              <img src={`https:${service.image.fields.file.url}`} alt={service.title} />
+            {service.fields.image?.fields?.file?.url ? (
+              <Image
+                src={`https:${service.fields.image.fields.file.url}`} // Thêm "https:" trước URL
+                alt={service.fields.title}
+                width={500}  // Điều chỉnh kích thước hình ảnh phù hợp
+                height={300} // Điều chỉnh kích thước hình ảnh phù hợp
+              />
             ) : (
               <p>Hình ảnh không khả dụng</p>
             )}
-            <h2>{service.title}</h2>
-            <p>{service.description}</p>
-            <p><strong>Thời gian:</strong> {service.urgency}</p>
+            <h2>{service.fields.title}</h2>
+            <p>{service.fields.description}</p>
+            <p><strong>Thời gian:</strong> {service.fields.urgency}</p>
           </div>
         ))}
       </div>
@@ -35,17 +34,13 @@ const Home = ({ services }: HomeProps) => {
   );
 };
 
+// Lấy dữ liệu dịch vụ từ Contentful
 export const getStaticProps: GetStaticProps = async () => {
   const services = await getServices();
-  const cleanedServices = services.map((service: any) => ({
-    title: service.fields?.title || "Dịch vụ không có tiêu đề",
-    description: service.fields?.description || "Không có mô tả",
-    urgency: service.fields?.urgency || "Không rõ",
-    image: service.fields?.image || null,
-  }));
+  
   return {
     props: {
-      services: cleanedServices,
+      services,
     },
   };
 };
