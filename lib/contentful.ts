@@ -23,8 +23,5 @@ export type Service = Entry<ServiceFields>;
 
 export const getServices = async (): Promise<Service[]> => {
   const response = await client.getEntries<Service>({ content_type: 'service' });
-
-  // In dữ liệu JSON ra console để kiểm tra cấu trúc
- 
   return response.items;
 };

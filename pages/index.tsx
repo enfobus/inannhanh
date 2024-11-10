@@ -14,12 +14,12 @@ const Home = ({ services }: HomeProps) => {
       <div className="services">
         {services.map((service, index) => (
           <div key={index} className="service">
-            {service.fields.image?.fields?.file?.url ? (
+            {service.fields.image?.file?.url ? (
               <Image
-                src={`https:${service.fields.image.fields.file.url}`} // Thêm "https:" trước URL
+                src={`https:${service.fields.image.file.url}`} // Đảm bảo thêm "https:"
                 alt={service.fields.title}
-                width={500}  // Điều chỉnh kích thước hình ảnh phù hợp
-                height={300} // Điều chỉnh kích thước hình ảnh phù hợp
+                width={500}  // Kích thước tùy chỉnh cho hình ảnh
+                height={300} // Kích thước tùy chỉnh cho hình ảnh
               />
             ) : (
               <p>Hình ảnh không khả dụng</p>
